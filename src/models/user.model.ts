@@ -4,7 +4,7 @@ import dbConnection from "../config/db/pg-connector";
 
 // We need to declare an interface for our model that is basically what our class would be
 interface UserInstance extends Model {
-    user_id: number;
+    id: number;
     name: string;
     email: string;
     password: string;
@@ -14,7 +14,7 @@ interface UserInstance extends Model {
   }
   
   const UserModel = dbConnection.define<UserInstance>("users", {
-    user_id: {
+    id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true // Automatically gets converted to SERIAL for postgres

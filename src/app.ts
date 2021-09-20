@@ -1,6 +1,7 @@
 import express from "express";
 import http from "http";
 import cors from "cors";
+import helmet from "helmet";
 
 import dbConnection from './config/db/pg-connector';
 import {Routes} from './routes';
@@ -19,6 +20,7 @@ class App {
         this.startServer();
         this.configureExpress();
         this.configureRoutes();
+        this.initExceptionHandler();
     }
 
     private configureExpress() {
@@ -27,6 +29,7 @@ class App {
           };
           
         this.app.use(cors(corsOptions));
+        this.app.use(helmet());
         this.app.use(express.urlencoded({ extended:true }));
         this.app.use(express.json({ limit: '1mb' })); // 100kb default
     }
@@ -52,7 +55,19 @@ class App {
 
     private configureRoutes(): void {
         new Routes(this.app);
-        console.log('Routes configured');
+        console.log('Routes configured...');
+    }
+
+    private initExceptionHandler(): void{
+        process
+            .on('unhandledRejection', (reason, p) => {
+                console.error(reason, 'Unhandled Rejection at Promise', p);
+                process.exit(1);
+            })
+            .on('uncaughtException', err => {
+                console.error(err, 'Uncaught Exception thrown');
+                process.exit(1);
+  });
     }
 
 }

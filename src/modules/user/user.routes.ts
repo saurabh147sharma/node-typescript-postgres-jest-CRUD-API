@@ -9,10 +9,11 @@ export class UserRoutes{
     public init(){
         const router = Router();
 
-        router.get('/', UserController.get);
+        router.get('/', UserController.findAll);
+        router.get('/:id', UserController.findOne);
         router.post('/', UserController.create);
-        router.put('/', UserController.update);
-        router.delete('/', UserController.delete);
+        router.put('/:id', UserController.update);
+        router.delete('/:id', UserController.delete);
 
         return router;
     }

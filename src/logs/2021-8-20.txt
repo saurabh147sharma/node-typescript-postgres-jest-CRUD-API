@@ -1,0 +1,25 @@
+
+
+2021-8-20 8:14 
+ Error Message: Validation error 
+ Request Payload: {"name":"Saurabh K","email":"saurabh.kumar8@tothenew.com","password":"Test@12123","city":"Delhi"} 
+ Request Query Params: {}
+
+2021-8-20 8:16 
+ Error Message: Validation error 
+ Request Headers: {"content-type":"application/json","user-agent":"PostmanRuntime/7.28.4","accept":"*/*","postman-token":"b961f738-4dd7-4264-bc35-4c5bff0fda66","host":"localhost:30002","accept-encoding":"gzip, deflate, br","connection":"keep-alive","content-length":"121"} 
+ Request Payload: {"name":"Saurabh K","email":"saurabh.kumar8@tothenew.com","password":"Test@12123","city":"Delhi"} 
+ Request Query Params: {}
+
+2021-8-20 8:16 
+ Error Message: Validation error 
+ Request Headers: {"content-type":"application/json","user-agent":"PostmanRuntime/7.28.4","accept":"*/*","postman-token":"80c7e6e5-9a52-40c2-9cd9-19b002af4832","host":"localhost:30002","accept-encoding":"gzip, deflate, br","connection":"keep-alive","content-length":"121"} 
+ Request Payload: {"name":"Saurabh K","email":"saurabh.kumar8@tothenew.com","password":"Test@12123","city":"Delhi"} 
+ Request Query Params: {}
+
+2021-8-20 8:20 
+ Error Message: Validation error 
+ Error Stack: {"name":"SequelizeUniqueConstraintError","errors":[{"message":"email must be unique","type":"unique violation","path":"email","value":"saurabh.kumar8@tothenew.com","origin":"DB","instance":{"createdAt":"2021-09-20T02:50:01.328Z","updatedAt":"2021-09-20T02:50:01.329Z","id":null,"name":"Saurabh K","email":"saurabh.kumar8@tothenew.com","password":"Test@12123"},"validatorKey":"not_unique","validatorName":null,"validatorArgs":[]}],"fields":{"email":"saurabh.kumar8@tothenew.com"},"parent":{"length":219,"name":"error","severity":"ERROR","code":"23505","detail":"Key (email)=(saurabh.kumar8@tothenew.com) already exists.","schema":"public","table":"users","constraint":"users_email_key","file":"nbtinsert.c","line":"656","routine":"_bt_check_unique","sql":"INSERT INTO \"users\" (\"id\",\"name\",\"email\",\"password\",\"created_at\",\"updated_at\") VALUES (DEFAULT,$1,$2,$3,$4,$5) RETURNING \"id\",\"name\",\"email\",\"password\",\"created_at\",\"updated_at\";","parameters":["Saurabh K","saurabh.kumar8@tothenew.com","Test@12123","2021-09-20 02:50:01.328 +00:00","2021-09-20 02:50:01.329 +00:00"]},"original":{"length":219,"name":"error","severity":"ERROR","code":"23505","detail":"Key (email)=(saurabh.kumar8@tothenew.com) already exists.","schema":"public","table":"users","constraint":"users_email_key","file":"nbtinsert.c","line":"656","routine":"_bt_check_unique","sql":"INSERT INTO \"users\" (\"id\",\"name\",\"email\",\"password\",\"created_at\",\"updated_at\") VALUES (DEFAULT,$1,$2,$3,$4,$5) RETURNING \"id\",\"name\",\"email\",\"password\",\"created_at\",\"updated_at\";","parameters":["Saurabh K","saurabh.kumar8@tothenew.com","Test@12123","2021-09-20 02:50:01.328 +00:00","2021-09-20 02:50:01.329 +00:00"]},"sql":"INSERT INTO \"users\" (\"id\",\"name\",\"email\",\"password\",\"created_at\",\"updated_at\") VALUES (DEFAULT,$1,$2,$3,$4,$5) RETURNING \"id\",\"name\",\"email\",\"password\",\"created_at\",\"updated_at\";"} 
+ Request Headers: {"content-type":"application/json","user-agent":"PostmanRuntime/7.28.4","accept":"*/*","postman-token":"704c3517-8911-4aee-a6fa-e8c9de12dca4","host":"localhost:30002","accept-encoding":"gzip, deflate, br","connection":"keep-alive","content-length":"121"} 
+ Request Payload: {"name":"Saurabh K","email":"saurabh.kumar8@tothenew.com","password":"Test@12123","city":"Delhi"} 
+ Request Query Params: {}
