@@ -9,6 +9,8 @@ interface Log{
 }
 
 export default class LogService{
+
+    private static isLogEnabled = true;
     
     constructor(){
 
@@ -19,6 +21,7 @@ export default class LogService{
         const requestPayload = JSON.stringify(request?.body);
         const requestQueryParams = JSON.stringify(request?.params);
         let log = `\r\n\r\n${DateUtil.getCurrentDateTime()}`;
+        log = `${log} \r\n Log Type: Error`;
         if(error && error.message){
             log = `${log} \r\n Error Message: ${error.message}`;
         }
@@ -35,8 +38,25 @@ export default class LogService{
             log = `${log} \r\n Request Query Params: ${requestQueryParams}`;
         }
         
+        LogService.logFileStat(log);
         
-        const fileName = this.getLogFileName();
+    }
+
+    public static info(message: string){
+        let log = `\r\n\r\n${DateUtil.getCurrentDateTime()}`;
+        log = `${log} \r\n Log Type: Error`;
+        log = `${log} \r\n Message: ${message}`;
+        LogService.logFileStat(log);
+    }
+
+    public static consoleLog(...params: any){
+        if(LogService.isLogEnabled){
+            console.log(params);
+        }
+    }
+
+    private static logFileStat(log: string){
+        const fileName = LogService.getLogFileName();
         const filePath = path.join(__dirname, '../../logs') + `/${fileName}`;
 
         fs.stat(filePath,(e)=>{
@@ -53,9 +73,7 @@ export default class LogService{
             else{
                 LogService.writeLog(filePath, log)
             }
-        })
-
-        
+        });
     }
 
     private static writeLog(filePath: string, log: string){

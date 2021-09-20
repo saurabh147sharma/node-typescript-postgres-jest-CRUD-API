@@ -3,6 +3,7 @@ import { IUser } from "./interfaces/i-user";
 import { UserModel } from "../../models/user.model";
 import ResponseService from "../../common/services/response.service";
 import * as messages from "./messages.json";
+import LogService from "../../common/services/log.service"
 
 export default class UserController{
 
