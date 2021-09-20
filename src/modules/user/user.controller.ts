@@ -1,9 +1,11 @@
 import {Request, Response} from "express";
 import { IUser } from "./interfaces/i-user";
 import { UserModel } from "../../models/user.model";
+import UserValidation from "./user.validation"
 import ResponseService from "../../common/services/response.service";
+import AuthUtil from "../../utils/auth.util"
+import ValidationService from "../../common/services/validation.service"
 import * as messages from "./messages.json";
-import LogService from "../../common/services/log.service"
 
 export default class UserController{
 
@@ -12,6 +14,11 @@ export default class UserController{
     public static async create(request:Request, response: Response){
         try{
         const user: IUser = request.body;
+        const validationErrors = ValidationService.joiValidator(UserValidation.registerUserValidation, user);
+        if(validationErrors.errors && validationErrors.errors.length){
+            //ResponseService.validationErrorResponse({response, validationErrors.errors});
+        }
+        user.password = await AuthUtil.getHashedPassword(user.password);
         await UserModel.create(user);
         ResponseService.successResponse({response, message: messages.user_created});
         }

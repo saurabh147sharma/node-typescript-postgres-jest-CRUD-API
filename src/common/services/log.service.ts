@@ -16,7 +16,8 @@ export default class LogService{
 
     }
 
-    public static error({request, error}: Log) {
+    public static error({request, error}: Log): void {
+        try{
         const requestHeaders = JSON.stringify(request?.headers);
         const requestPayload = JSON.stringify(request?.body);
         const requestQueryParams = JSON.stringify(request?.params);
@@ -39,10 +40,14 @@ export default class LogService{
         }
         
         LogService.logFileStat(log);
+    }
+    catch(error){
+        console.log('Error while logging', error);
+    }
         
     }
 
-    public static info(message: string){
+    public static info(message: string): void{
         let log = `\r\n\r\n${DateUtil.getCurrentDateTime()}`;
         log = `${log} \r\n Log Type: Error`;
         log = `${log} \r\n Message: ${message}`;
@@ -55,7 +60,7 @@ export default class LogService{
         }
     }
 
-    private static logFileStat(log: string){
+    private static logFileStat(log: string): void{
         const fileName = LogService.getLogFileName();
         const filePath = path.join(__dirname, '../../logs') + `/${fileName}`;
 
@@ -76,17 +81,16 @@ export default class LogService{
         });
     }
 
-    private static writeLog(filePath: string, log: string){
+    private static writeLog(filePath: string, log: string): void{
         fs.appendFile(filePath, log, err => {
             if (err) {
-              console.error(`Error while writting logs in the log file ${filePath}`,err)
-              return
+              console.error(`Error while writting logs in the log file ${filePath}`,err);
             }
-            //log written successfully
+            // if no error a blank file will be created
           });
     }
 
-    private static getLogFileName(){
+    private static getLogFileName(): string{
         return `${DateUtil.getCurrentDate()}.txt`;
     }
 

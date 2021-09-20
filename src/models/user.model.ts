@@ -1,4 +1,3 @@
-import exp from "constants";
 import { Model, DataTypes } from "sequelize";
 import dbConnection from "../config/db/pg-connector";
 
@@ -21,12 +20,16 @@ interface UserInstance extends Model {
     },
     name: {
       type: DataTypes.STRING,
+      allowNull: false
     },
     email: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false
     },
     password: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        allowNull: false
     },
     createdAt: {
         field: 'created_at',
@@ -38,6 +41,15 @@ interface UserInstance extends Model {
         type: DataTypes.DATE,
         defaultValue: null
     },
-  });
+  },
+  {
+    hooks: {
+      beforeCreate: function (user:any) {
+        user.email = user.email.toLowerCase();
+        return user;
+      }
+    }
+  }
+  );
 
   export {UserModel};
