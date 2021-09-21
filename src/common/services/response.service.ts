@@ -8,6 +8,7 @@ import LogService from "./log.service";
     data?:  Object | Array<any> | null;
     error? : any;
     errors?: Array<object>;
+    httpStatusCode?: number;
 }
 
 interface ApiResponse {
@@ -27,11 +28,14 @@ export default class ResponseService {
             response.status(200).send(res);
         }
 
-        public static errorResponse({request,response,error, message}: ResponseParamsInterface){
-            LogService.error({request,error});
+        public static errorResponse({request,response,error, message, httpStatusCode}: ResponseParamsInterface){
+            if(error){
+                LogService.error({request,error});
+            }
             const res: ApiResponse = {};
             res.message = message ? message : 'Something went wrong, Please contact to Administrator!';
-            response.status(500).send(res);
+            httpStatusCode = httpStatusCode? httpStatusCode : 500;
+            response.status(httpStatusCode).send(res);
         }
 
         public static validationErrorResponse({response,errors}: ResponseParamsInterface){

@@ -1,5 +1,6 @@
 import {Request, Response} from "express"
 
+import { AuthRoutes } from "./modules/auth/auth.routes";
 import {UserRoutes} from './modules/user/user.routes';
 
 export class Routes {
@@ -15,6 +16,7 @@ export class Routes {
             res.json({"message": "This is API home page"});
         });
         this.app.use('/user', new UserRoutes().init());
+        this.app.use('/auth', new AuthRoutes().init());
     }
 
 }
