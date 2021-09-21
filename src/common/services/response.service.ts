@@ -5,7 +5,7 @@ import LogService from "./log.service";
     request?: Request; 
     response: Response;
     message?: string;
-    data?:  Object | Array<any>;
+    data?:  Object | Array<any> | null;
     error? : any;
     errors?: Array<object>;
 }
@@ -38,7 +38,7 @@ export default class ResponseService {
             const res: ApiResponse = {};
             res.message = 'Validation Error!';
             res.errors = errors
-            response.status(500).send(res);
+            response.status(400).send(res);
         }
     
 }

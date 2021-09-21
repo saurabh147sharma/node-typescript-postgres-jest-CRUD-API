@@ -1,16 +1,26 @@
 import Joi from "joi";
 import { startCase } from "lodash";
+import {Response} from "express";
+
+export interface ErrorResponse{
+    field: string;
+    message: string;
+}
 
 export default class ValidationService{
 
     constructor() {}
 
-    public static joiValidator(schema: any, payload: any): {errors?: any[], value?: object}{
+    public static validateRequest(schema: any, requestPayload: any, response: Response){
+
+    }
+
+    public static joiValidator(schema: any, payload: any): {errors?: ErrorResponse[] , value?: object}{
         const joiDefaultOptions = {
             abortEarly: false,
             allowUnknown: true
         };
-        
+
         const errors: any = [];
         const validation = schema.validate(payload,joiDefaultOptions);
         if(validation.error){
