@@ -1,17 +1,16 @@
 import { Request, Response } from "express";
-import { IUser } from "./interfaces/i-user";
-import { UserModel } from "../../models/user.model";
+import { ICreateUser, IUser } from "./interfaces/i-user";
 import UserValidation from "./user.validation";
 import ResponseService from "../../common/services/response.service";
-import AuthUtil from "../../utils/auth.util";
 import ValidationService from "../../common/services/validation.service";
 import * as messages from "./messages.json";
+import UserService from "./user.service";
 
 export default class UserController {
   // function to create new user
   public static async create(request: Request, response: Response) {
     try {
-      const user: IUser = request.body;
+      const user: ICreateUser = request.body;
       const validationErrors = ValidationService.joiValidator(
         UserValidation.userRegisterSchema,
         user
@@ -20,8 +19,7 @@ export default class UserController {
         const errors = validationErrors.errors;
         ResponseService.validationErrorResponse({ response, errors });
       } else {
-        user.password = await AuthUtil.getHashedPassword(user.password);
-        await UserModel.create(user);
+        await UserService.createUser(user);
         ResponseService.successResponse({
           response,
           message: messages.user_created,
@@ -44,11 +42,8 @@ export default class UserController {
         const errors = validationErrors.errors;
         ResponseService.validationErrorResponse({ response, errors });
       } else {
-        await UserModel.update(user, {
-          where: {
-            id: request.params.id,
-          },
-        });
+        user.id = parseInt(request.params.id);
+        await UserService.updateUser(user);
         ResponseService.successResponse({
           response,
           message: messages.user_updated,
@@ -70,11 +65,8 @@ export default class UserController {
         const errors = validationErrors.errors;
         ResponseService.validationErrorResponse({ response, errors });
       } else {
-        await UserModel.destroy({
-          where: {
-            id: request.params.id,
-          },
-        });
+        const userId = parseInt(request.params.id);
+        await UserService.destroyUser(userId);
         ResponseService.successResponse({
           response,
           message: messages.user_deleted,
@@ -88,9 +80,7 @@ export default class UserController {
   // function to get all the users from users table
   public static async findAll(request: Request, response: Response) {
     try {
-      const users = await UserModel.findAll({
-        attributes: ["id", "name", "email"],
-      });
+      const users = await UserService.getUsers();
       ResponseService.successResponse({ response, data: users });
     } catch (error) {
       ResponseService.errorResponse({ request, response, error });
@@ -100,7 +90,7 @@ export default class UserController {
   // function to get single user detail by id
   public static async findOne(request: Request, response: Response) {
     try {
-      const userId = request.params.id;  
+      const userId = parseInt(request.params.id);
       const validationErrors = ValidationService.joiValidator(
         UserValidation.userIdSchema,
         { id: userId }
@@ -109,12 +99,7 @@ export default class UserController {
         const errors = validationErrors.errors;
         ResponseService.validationErrorResponse({ response, errors });
       } else {
-        const user = await UserModel.findOne({
-          attributes: ["id", "name", "email"],
-          where: {
-            id: userId,
-          },
-        });
+        const user = await UserService.getUserDetail(userId);
         ResponseService.successResponse({ response, data: user });
       }
     } catch (error) {

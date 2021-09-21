@@ -32,14 +32,23 @@ export default class AuthController {
           user &&
           AuthUtil.comparePassword(loginRequest.password, user.password)
         ) {
-          const token = TokenAuthenticator.getAuthToken({ id: user.id, name: user.name, email: user.email });
+          const token = TokenAuthenticator.getAuthToken({
+            id: user.id,
+            name: user.name,
+            email: user.email,
+          });
           ResponseService.successResponse({
             response,
             data: { id: user.id, name: user.name, email: user.email, token },
           });
         } else {
           // Bad request
-          ResponseService.errorResponse({ request, response, httpStatusCode: 401, message: messages.invalid_login });
+          ResponseService.errorResponse({
+            request,
+            response,
+            httpStatusCode: 401,
+            message: messages.invalid_login,
+          });
         }
       }
     } catch (error) {

@@ -1,16 +1,14 @@
-import { Router } from 'express';
+import { Router } from "express";
 import AuthController from "./auth.controller";
 
-export class AuthRoutes{
-    constructor(){
+export class AuthRoutes {
+  constructor() {}
 
-    }
+  public init() {
+    const router = Router();
 
-    public init(){
-        const router = Router();
+    router.post("/login", AuthController.login);
 
-        router.post('/login', AuthController.login);
-
-        return router;
-    }
+    return router;
+  }
 }

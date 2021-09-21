@@ -15,14 +15,22 @@ export default class TokenAuthenticator {
     try {
       const jwtPayload = <any>jwt.verify(token, JwtConfig.jwtSecret);
       response.locals.jwtPayload = jwtPayload;
-      let newToken: string = TokenAuthenticator.getAuthToken({id: jwtPayload.id, name: jwtPayload.name, email: jwtPayload.email});
+      let newToken: string = TokenAuthenticator.getAuthToken({
+        id: jwtPayload.id,
+        name: jwtPayload.name,
+        email: jwtPayload.email,
+      });
       response.setHeader("token", newToken);
       //Call the next middleware or controller
       next();
     } catch (error) {
-        // Bad request
-        console.log(error,'error');
-        ResponseService.errorResponse({ request, response, httpStatusCode: 400, message: messages.invalid_token });
+      // Bad request
+      ResponseService.errorResponse({
+        request,
+        response,
+        httpStatusCode: 400,
+        message: messages.invalid_token,
+      });
     }
   }
 
