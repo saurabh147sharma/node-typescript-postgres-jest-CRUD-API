@@ -1,3 +1,5 @@
+import { uniq } from "lodash";
+import { IDBQueryParams } from "../../common/interfaces/i-db-query-params";
 import { UserModel } from "../../models/user.model";
 import AuthUtil from "../../utils/auth.util";
 import { ICreateUser, IUser } from "./interfaces/i-user";
@@ -15,12 +17,10 @@ export default class UserService {
     }
   }
 
-  public static async updateUser(user: IUser): Promise<any> {
+  public static async updateUser({ match, data }: IDBQueryParams): Promise<any> {
     try {
-      const result = await UserModel.update(user, {
-        where: {
-          id: user.id,
-        },
+      const result = await UserModel.update(data, {
+        where: match,
       });
       return result;
     } catch (error) {
@@ -28,12 +28,10 @@ export default class UserService {
     }
   }
 
-  public static async destroyUser(userId: number): Promise<any> {
+  public static async destroyUser(match: any): Promise<any> {
     try {
       const result = await UserModel.destroy({
-        where: {
-          id: userId,
-        },
+        where: match,
       });
       return result;
     } catch (error) {
@@ -52,13 +50,16 @@ export default class UserService {
     }
   }
 
-  public static async getUserDetail(userId: number): Promise<IUser | null> {
+  public static async getUserDetail({ match, attributes }: IDBQueryParams): Promise<IUser | null> {
     try {
+      let project = ["id", "name", "email"];
+      if (attributes) {
+        project = uniq([...project, ...attributes]);
+      }
+
       const user = UserModel.findOne({
-        attributes: ["id", "name", "email"],
-        where: {
-          id: userId,
-        },
+        attributes: project,
+        where: match,
       });
       return user;
     } catch (error) {

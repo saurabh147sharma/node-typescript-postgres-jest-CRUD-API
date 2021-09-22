@@ -5,11 +5,7 @@ import JwtConfig from "../config/jwt.config";
 import * as messages from "./messages.json";
 
 export default class TokenAuthenticator {
-  public static validateToken(
-    request: Request,
-    response: Response,
-    next: NextFunction
-  ) {
+  public static validateToken(request: Request, response: Response, next: NextFunction) {
     //Get the jwt token from the head
     const token = <string>request.headers["token"];
     try {
@@ -34,11 +30,7 @@ export default class TokenAuthenticator {
     }
   }
 
-  public static getAuthToken(user: {
-    id: number;
-    name: string;
-    email: string;
-  }): string {
+  public static getAuthToken(user: { id: number; name: string; email: string }): string {
     const token = jwt.sign(user, JwtConfig.jwtSecret, {
       expiresIn: JwtConfig.tokenExpiryTime,
     });

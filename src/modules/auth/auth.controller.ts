@@ -8,30 +8,20 @@ import ValidationService from "../../common/services/validation.service";
 import * as messages from "./messages.json";
 import AuthValidation from "./auth.validation";
 import TokenAuthenticator from "../../middleware/token-authenticator.middleware";
+import UserService from "../user/user.service";
 
 export default class AuthController {
   // function to login user
   public static async login(request: Request, response: Response) {
     try {
       const loginRequest: ILogin = request.body;
-      const validationErrors = ValidationService.joiValidator(
-        AuthValidation.userLoginSchema,
-        loginRequest
-      );
+      const validationErrors = ValidationService.joiValidator(AuthValidation.userLoginSchema, loginRequest);
       if (validationErrors.errors && validationErrors.errors.length) {
         const errors = validationErrors.errors;
         ResponseService.validationErrorResponse({ response, errors });
       } else {
-        const user = await UserModel.findOne({
-          attributes: ["id", "name", "email", "password"],
-          where: {
-            email: loginRequest.email,
-          },
-        });
-        if (
-          user &&
-          AuthUtil.comparePassword(loginRequest.password, user.password)
-        ) {
+        const user = await UserService.getUserDetail({ match: { email: loginRequest.email }, attributes: ["password"] });
+        if (user && AuthUtil.comparePassword(loginRequest.password, user.password)) {
           const token = TokenAuthenticator.getAuthToken({
             id: user.id,
             name: user.name,

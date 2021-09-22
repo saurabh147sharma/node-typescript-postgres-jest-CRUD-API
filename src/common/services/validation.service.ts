@@ -10,16 +10,9 @@ export interface ErrorResponse {
 export default class ValidationService {
   constructor() {}
 
-  public static validateRequest(
-    schema: any,
-    requestPayload: any,
-    response: Response
-  ) {}
+  public static validateRequest(schema: any, requestPayload: any, response: Response) {}
 
-  public static joiValidator(
-    schema: any,
-    payload: any
-  ): { errors?: ErrorResponse[]; value?: object } {
+  public static joiValidator(schema: any, payload: any): { errors?: ErrorResponse[]; value?: object } {
     const joiDefaultOptions = {
       abortEarly: false,
       allowUnknown: true,

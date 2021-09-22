@@ -5,14 +5,9 @@ export default class AuthUtil {
 
   constructor() {}
 
-  public static async getHashedPassword(
-    plainPassword: string
-  ): Promise<string> {
+  public static async getHashedPassword(plainPassword: string): Promise<string> {
     try {
-      const hashedPassword = await bcrypt.hash(
-        plainPassword,
-        AuthUtil.saltRounds
-      );
+      const hashedPassword = await bcrypt.hash(plainPassword, AuthUtil.saltRounds);
       return hashedPassword;
     } catch (error) {
       console.log("Error while hashing password", error);
@@ -20,10 +15,7 @@ export default class AuthUtil {
     }
   }
 
-  public static async comparePassword(
-    inputPasssword: string,
-    dbPassword: string
-  ): Promise<boolean> {
+  public static async comparePassword(inputPasssword: string, dbPassword: string): Promise<boolean> {
     try {
       const result = await bcrypt.compare(inputPasssword, dbPassword);
       return result;

@@ -78,10 +78,7 @@ export default class LogService {
   private static writeLog(filePath: string, log: string): void {
     fs.appendFile(filePath, log, (err) => {
       if (err) {
-        console.error(
-          `Error while writting logs in the log file ${filePath}`,
-          err
-        );
+        console.error(`Error while writting logs in the log file ${filePath}`, err);
       }
       // if no error a blank file will be created
     });

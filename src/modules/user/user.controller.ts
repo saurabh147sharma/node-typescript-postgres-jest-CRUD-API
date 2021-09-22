@@ -11,10 +11,7 @@ export default class UserController {
   public static async create(request: Request, response: Response) {
     try {
       const user: ICreateUser = request.body;
-      const validationErrors = ValidationService.joiValidator(
-        UserValidation.userRegisterSchema,
-        user
-      );
+      const validationErrors = ValidationService.joiValidator(UserValidation.userRegisterSchema, user);
       if (validationErrors.errors && validationErrors.errors.length) {
         const errors = validationErrors.errors;
         ResponseService.validationErrorResponse({ response, errors });
@@ -34,16 +31,12 @@ export default class UserController {
   public static async update(request: Request, response: Response) {
     try {
       const user: IUser = request.body;
-      const validationErrors = ValidationService.joiValidator(
-        UserValidation.userUpdateSchema,
-        user
-      );
+      const validationErrors = ValidationService.joiValidator(UserValidation.userUpdateSchema, user);
       if (validationErrors.errors && validationErrors.errors.length) {
         const errors = validationErrors.errors;
         ResponseService.validationErrorResponse({ response, errors });
       } else {
-        user.id = parseInt(request.params.id);
-        await UserService.updateUser(user);
+        await UserService.updateUser({ match: { id: request.params.id }, data: user });
         ResponseService.successResponse({
           response,
           message: messages.user_updated,
@@ -57,16 +50,13 @@ export default class UserController {
   // function to delete the user by user id
   public static async delete(request: Request, response: Response) {
     try {
-      const validationErrors = ValidationService.joiValidator(
-        UserValidation.userIdSchema,
-        { id: request.params.id }
-      );
+      const userId = request.params.id;
+      const validationErrors = ValidationService.joiValidator(UserValidation.userIdSchema, { id: userId });
       if (validationErrors.errors && validationErrors.errors.length) {
         const errors = validationErrors.errors;
         ResponseService.validationErrorResponse({ response, errors });
       } else {
-        const userId = parseInt(request.params.id);
-        await UserService.destroyUser(userId);
+        await UserService.destroyUser({ id: userId });
         ResponseService.successResponse({
           response,
           message: messages.user_deleted,
@@ -90,16 +80,13 @@ export default class UserController {
   // function to get single user detail by id
   public static async findOne(request: Request, response: Response) {
     try {
-      const userId = parseInt(request.params.id);
-      const validationErrors = ValidationService.joiValidator(
-        UserValidation.userIdSchema,
-        { id: userId }
-      );
+      const userId = request.params.id;
+      const validationErrors = ValidationService.joiValidator(UserValidation.userIdSchema, { id: userId });
       if (validationErrors.errors && validationErrors.errors.length) {
         const errors = validationErrors.errors;
         ResponseService.validationErrorResponse({ response, errors });
       } else {
-        const user = await UserService.getUserDetail(userId);
+        const user = await UserService.getUserDetail({ match: { id: userId } });
         ResponseService.successResponse({ response, data: user });
       }
     } catch (error) {
