@@ -1,4 +1,5 @@
 import { Model, DataTypes } from "sequelize";
+import CypherUtil from "../utils/cypher.util"
 import dbConnection from "../config/db/pg-connector";
 
 // We need to declare an interface for our model that is basically what our class would be
@@ -49,6 +50,10 @@ const UserModel = dbConnection.define<UserInstance>(
         user.email = user.email.toLowerCase();
         return user;
       },
+      afterFind: function (users: any){
+        // encrypt user id
+        
+      }
     },
   }
 );

@@ -39,10 +39,12 @@ export default class UserService {
     }
   }
 
-  public static async getUsers(): Promise<IUser[]> {
+  public static async getUsers({offset, limit}: {offset?: number; limit?: number}): Promise<IUser[]> {
     try {
       const users = await UserModel.findAll({
         attributes: ["id", "name", "email"],
+        offset: offset ? offset : 0,
+        limit: limit ? limit : 10,
       });
       return users;
     } catch (error) {

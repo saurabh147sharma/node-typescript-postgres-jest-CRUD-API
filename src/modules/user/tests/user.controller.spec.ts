@@ -1,7 +1,15 @@
 import { Request, Response } from "express";
 import UserController from "../user.controller";
 
-describe("Get users", () => {
+describe("Create users", () => {
+
+  // Should return validation error if any with the status code 400/bad request
+  // if no error in creating new user it should return success response with status code 200
+  // if there is any error it should return the error message with status code 500
+
+});
+
+describe("Get users list", () => {
   let mockRequest: Partial<Request>;
   let mockResponse: Partial<Response>;
   let response = {};

@@ -70,7 +70,16 @@ export default class UserController {
   // function to get all the users from users table
   public static async findAll(request: Request, response: Response) {
     try {
-      const users = await UserService.getUsers();
+      let page = 0;
+      let limit = 0;
+      let offset;
+      if (request.query && request.query.page) { page = (request.query as any).page; }
+      if (request.query && request.query.limit) { limit = (request.query as any).limit; }
+      if(page && limit){
+        offset = (page - 1) * limit;
+      }
+    
+      const users = await UserService.getUsers({offset, limit});
       ResponseService.successResponse({ response, data: users });
     } catch (error) {
       ResponseService.errorResponse({ request, response, error });
