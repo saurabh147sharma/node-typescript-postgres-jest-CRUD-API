@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 
-import { ILogin } from "./interfaces/i-login";
-import { UserModel } from "../../models/user.model";
+import { ILogin } from "../../interfaces/login/i-login";
 import ResponseService from "../../common/services/response.service";
 import AuthUtil from "../../utils/auth.util";
 import ValidationService from "../../common/services/validation.service";

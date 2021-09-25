@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ICreateUser, IUser } from "./interfaces/i-user";
+import { ICreateUser, IUser } from "../../interfaces/user/i-user";
 import UserValidation from "./user.validation";
 import ResponseService from "../../common/services/response.service";
 import ValidationService from "../../common/services/validation.service";
@@ -73,13 +73,17 @@ export default class UserController {
       let page = 0;
       let limit = 0;
       let offset;
-      if (request.query && request.query.page) { page = (request.query as any).page; }
-      if (request.query && request.query.limit) { limit = (request.query as any).limit; }
-      if(page && limit){
+      if (request.query && request.query.page) {
+        page = (request.query as any).page;
+      }
+      if (request.query && request.query.limit) {
+        limit = (request.query as any).limit;
+      }
+      if (page && limit) {
         offset = (page - 1) * limit;
       }
-    
-      const users = await UserService.getUsers({offset, limit});
+
+      const users = await UserService.getUsers({ offset, limit });
       ResponseService.successResponse({ response, data: users });
     } catch (error) {
       ResponseService.errorResponse({ request, response, error });

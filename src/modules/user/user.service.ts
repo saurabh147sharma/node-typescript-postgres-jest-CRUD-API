@@ -2,7 +2,7 @@ import { uniq } from "lodash";
 import { IDBQueryParams } from "../../common/interfaces/i-db-query-params";
 import { UserModel } from "../../models/user.model";
 import AuthUtil from "../../utils/auth.util";
-import { ICreateUser, IUser } from "./interfaces/i-user";
+import { ICreateUser, IUser } from "../../interfaces/user/i-user";
 
 export default class UserService {
   constructor() {}
@@ -33,16 +33,17 @@ export default class UserService {
       const result = await UserModel.destroy({
         where: match,
       });
+      console.log(result, "delte user");
       return result;
     } catch (error) {
       throw error;
     }
   }
 
-  public static async getUsers({offset, limit}: {offset?: number; limit?: number}): Promise<IUser[]> {
+  public static async getUsers({ offset, limit }: { offset?: number; limit?: number }): Promise<IUser[]> {
     try {
       const users = await UserModel.findAll({
-        attributes: ["id", "name", "email"],
+        attributes: ["id", "name", "email", "gender"],
         offset: offset ? offset : 0,
         limit: limit ? limit : 10,
       });
@@ -59,7 +60,7 @@ export default class UserService {
         project = uniq([...project, ...attributes]);
       }
 
-      const user = UserModel.findOne({
+      const user = await UserModel.findOne({
         attributes: project,
         where: match,
       });
