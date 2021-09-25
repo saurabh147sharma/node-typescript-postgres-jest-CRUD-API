@@ -33,6 +33,7 @@
     "@types/pg": "^8.6.1",
     "@types/sequelize": "^4.28.10",
     "jest": "^27.1.1",
+    "node-mocks-http": "^1.11.0",
     "nodemon": "^2.0.12",
     "ts-jest": "^27.0.5",
     "ts-node": "^10.2.1",

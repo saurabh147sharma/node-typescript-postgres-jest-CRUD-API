@@ -1,47 +1,63 @@
-import { Request, Response } from "express";
+import * as httpMocks from "node-mocks-http";
 import UserController from "../user.controller";
 
-describe("Create users", () => {
-
-  // Should return validation error if any with the status code 400/bad request
-  // if no error in creating new user it should return success response with status code 200
-  // if there is any error it should return the error message with status code 500
-
-});
-
-describe("Get users list", () => {
-  let mockRequest: Partial<Request>;
-  let mockResponse: Partial<Response>;
-  let response = {};
-
-  beforeEach(() => {
-    mockRequest = {};
-    mockResponse = {
-      statusCode: 0,
-      send: jest.fn().mockImplementation((result) => {
-        response = result;
-      }),
+describe("Create user", () => {
+  test("Should create a new user and return 200 status code", async () => {
+    let requestBody = {
+      name: "Test User2",
+      email: "testuser2@gmail.com",
+      password: "1234",
     };
+    let expectedResponse = {
+      message: "User created successfully",
+    };
+    let request = httpMocks.createRequest({
+      body: requestBody,
+    });
+    let response = httpMocks.createResponse();
+    UserController.create = jest.fn().mockResolvedValue(expectedResponse);
+    await UserController.create(request, response);
+    expect(response._getStatusCode()).toEqual(200);
+    expect(JSON.parse(response._getData())).toEqual(expectedResponse);
   });
 
-  test("Users list", () => {
-    const expectedStatusCode = 200;
-    const expectedResponse = {
-      users: [
-        {
-          name: "Saurabh",
-          age: 30,
-        },
-        {
-          name: "Gaurav",
-          age: 25,
-        },
-      ],
+  test("Should return 400 if any validation error", async () => {
+    let requestBody = [
+      {
+        name: "Test User2",
+        email: "testuser2@gmail.com",
+      },
+      {
+        name: "Test User2",
+        password: "1234",
+      },
+      {
+        email: "testuser2@gmail.com",
+        password: "1234",
+      },
+    ];
+    for (const body of requestBody) {
+      let request = httpMocks.createRequest({
+        body,
+      });
+      let response = httpMocks.createResponse();
+      await UserController.create(request, response);
+      expect(response._getStatusCode()).toEqual(400);
+    }
+  });
+
+  test("Should return 500 if any error occured while creating a new user", async () => {
+    let requestBody = {
+      name: "Test User2",
+      email: "testuser2@gmail.com",
+      password: "1234",
     };
-
-    UserController.findAll(mockRequest as Request, mockResponse as Response);
-
-    expect(mockResponse.statusCode).toBe(expectedStatusCode);
-    expect(response).toEqual(expectedResponse);
+    let request = httpMocks.createRequest({
+      body: requestBody,
+    });
+    let response = httpMocks.createResponse();
+    UserController.create = jest.fn().mockRejectedValueOnce(new Error("Something went wrong"));
+    await UserController.create(request, response);
+    expect(response._getStatusCode()).toEqual(500);
   });
 });
