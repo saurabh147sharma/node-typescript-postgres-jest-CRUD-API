@@ -20,7 +20,7 @@ export default class AuthController {
         ResponseService.validationErrorResponse({ response, errors });
       } else {
         const user = await UserService.getUserDetail({ match: { email: loginRequest.email }, attributes: ["password"] });
-        if (user && AuthUtil.comparePassword(loginRequest.password, user.password)) {
+        if (user && await AuthUtil.comparePassword(loginRequest.password, user.password)) {
           const token = TokenAuthenticator.getAuthToken({
             id: user.id,
             name: user.name,
